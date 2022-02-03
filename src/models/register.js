@@ -18,6 +18,13 @@ const pizzaDilivaryschema =new mongoose.Schema(
             type:String,
             required:true
         },
+        mobilnumber:{
+            type:String,
+            required:true,
+            unique:true,
+            minlength:10,
+            maxlength:10
+        },
         password:{
            type:String,
            required:true
@@ -31,6 +38,6 @@ const pizzaDilivaryschema =new mongoose.Schema(
 )
 //create collection
 
-const register =new mongoose.model("registers",pizzaDilivaryschema);
-module.exports=register;
+const Register =new mongoose.model("Registers",pizzaDilivaryschema);
+module.exports=Register;
 

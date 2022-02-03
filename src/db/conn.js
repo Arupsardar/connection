@@ -5,7 +5,7 @@ mongoose.connect("mongodb://localhost:27017/pizzaDilivary",{
     useUnifiedTopology:true,
     // useCreateIndex:true
 }).then(()=>{
-    console.log("conncton succsful");
+    console.log("connction succussful");
 }).catch((err)=>{
     console.log(err);
 });
