@@ -1,8 +1,12 @@
+require('dotenv')
 const express = require("express");
 const { json } = require("express");
 const path = require("path");
 const hbs = require("hbs");
 const register = require("./models/register");
+const bcrypt = require("bcryptjs");
+const jwt =require('jsonwebtoken')
+
 
 const app = express();
 require("./db/conn");
@@ -41,6 +45,13 @@ app.post("/register", async (req, res) => {
         password: password,
         confirmpassword: cpassword,
       });
+
+      //middelwear
+      // console.log("the success part" +registeruser);
+      const token =await registeruser.genarateAuthToken();
+      // console.log("the token part "+ token);
+
+
       const reg = await registeruser.save();
       res.status(201).render("index");
     } else {
@@ -60,7 +71,8 @@ app.post("/login", async (req, res) => {
     const pw = req.body.userpassword;
     //  console.log(`email ${email} password ${pw}`);
     const useremail = await register.findOne({ email: email });
-    if (useremail.password === pw) {
+    const isMatch =await bcrypt.compare(pw,useremail.password)
+    if (isMatch) {
       res.status(201).render("index");
     } else {
       res.send("Passwords are not matching");
@@ -69,6 +81,22 @@ app.post("/login", async (req, res) => {
     res.status(400).send("invalid page");
   }
 });
+
+// const createToken = async () => {
+//   const token = await jwt.sign(
+//     { _id: "61fbb62eda09cbabff474c12" },
+//     "myNameIsArupAndIamNotATerorist",{expiresIn:"2 seconds"}
+//   );
+//   console.log(token);
+//   const userVer = await jwt.verify(token,"myNameIsArupAndIamNotATerorist");
+//   console.log(userVer);
+
+// }
+
+// createToken();
+
+
+
 
 app.listen(port, () => {
   console.log("server is runing at port no  " + port);
